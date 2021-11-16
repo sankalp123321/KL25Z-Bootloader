@@ -8,8 +8,11 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
--include utilities/subdir.mk
 -include startup/subdir.mk
+-include source/uart/subdir.mk
+-include source/srec/subdir.mk
+-include source/fifo/subdir.mk
+-include source/cmdcentre/subdir.mk
 -include source/subdir.mk
 -include drivers/subdir.mk
 -include board/subdir.mk
@@ -46,7 +49,7 @@ clean:
 
 post-build:
 	-@echo 'Performing post-build steps'
-	-arm-none-eabi-size "Bootloader_PES.axf"; # arm-none-eabi-objcopy -v -O binary "Bootloader_PES.axf" "Bootloader_PES.bin" ; # checksum -p MKL25Z128xxx4 -d "Bootloader_PES.bin";
+	-arm-none-eabi-size "Bootloader_PES.axf" ; arm-none-eabi-objcopy -v -O binary "Bootloader_PES.axf" "Bootloader_PES.bin" ; # checksum -p MKL25Z128xxx4 -d "Bootloader_PES.bin"
 	-@echo ' '
 
 .PHONY: all clean dependents post-build

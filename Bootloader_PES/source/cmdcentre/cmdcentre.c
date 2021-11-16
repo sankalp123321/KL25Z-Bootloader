@@ -11,9 +11,8 @@
  */
 #include "cmdcentre.h"
 #include "../uart/uart.h"
-#include "../hexview/hexview.h"
-#include "../commons/common.h"
 #include <string.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 typedef struct command_t
@@ -29,9 +28,7 @@ command_t cmd[] =
 {
 		// Command | Arguments | Command description | command function handler
 		{"Help", "<none>", "help command view", CmdCentre_HelpHandler},
-		{"dump", "<start_addr><length>", "Hex view", CmdCentre_Hexdump},
 		{"author", "<none>", "displays the author name", CmdCentre_Author},
-		{"info", "<none>", "displays the build information", CmdCentre_Info},
 };
 
 const int cmd_size = sizeof(cmd)/sizeof(cmd[0]);
@@ -56,60 +53,7 @@ void CmdCentre_Author(int argc, char* argv[])
 	printf("Sankalp Agrawal\r\n");
 }
 
-void CmdCentre_Hexdump(int argc, char* argv[])
-{
-	if(argc != 2)
-	{
-		printf("Wrong command\r\n");
-		return;
-	}
-	unsigned int addr = atoi(argv[1]);
-	unsigned int siz = atoi(argv[2]);
 
-	// CHeck if the args is hex or not
-	if(check_hex(argv[1]))
-	{
-		addr = strtoul(argv[1], NULL, 16);
-	}
-
-	if(check_hex(argv[2]))
-	{
-		siz = strtoul(argv[2], NULL, 16);
-	}
-
-	hexdump(addr, siz);
-	printf("\r\n");
-}
-
-// String-ify the values
-#define XSTR(x) #x
-#define STR(x) XSTR(x)
-
-#ifndef BUILD_COMMIT
-	#error "Please define BUILD_COMMIT as a -D variable"
-#endif
-#ifndef BUILD_MACHINE
-	#error "Please define BUILD_MACHINE as a -D variable"
-#endif
-#ifndef BUILD_DATE
-	#error "Please define BUILD_DATE as a -D variable"
-#endif
-#ifndef VERSION_TAG
-	#error "Please define VERSION_TAG as a -D variable"
-#endif
-
-void CmdCentre_Info(int argc, char* argv[])
-{
-	/**
-	 * These variables are defined in the makefile and the
-	 * values are inputted real time.
-	 */
-	const char *hostname = STR(BUILD_MACHINE);
-	const char *date = STR(BUILD_DATE);
-	const char *commit = STR(BUILD_COMMIT);
-	const char *version = STR(VERSION_TAG);
-	printf("Version %s built on %s at %s \r\nCommit %s\r\n", version, hostname, date, commit);
-}
 
 int CmdCentre_WordEngine(char *cmd_new)
 {

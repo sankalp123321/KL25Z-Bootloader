@@ -38,9 +38,8 @@
 #include "pin_mux.h"
 #include "clock_config.h"
 #include "MKL25Z4.h"
-#include "fsl_debug_console.h"
 /* TODO: insert other include files here. */
-
+#include "uart/uart.h"
 /* TODO: insert other definitions and declarations here. */
 
 /*
@@ -56,8 +55,8 @@ int main(void) {
     /* Init FSL debug console. */
     BOARD_InitDebugConsole();
 #endif
-
-    PRINTF("Hello World\n");
+    UART_Init(38400);
+    printf("Hello World\n");
 
     /* Force the counter to be placed into memory. */
     volatile static int i = 0 ;

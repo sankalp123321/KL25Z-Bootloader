@@ -29,7 +29,6 @@
  */
 
 #include "fsl_common.h"
-#include "fsl_debug_console.h"
 
 #ifndef NDEBUG
 #if (defined(__CC_ARM)) || (defined(__ICCARM__))

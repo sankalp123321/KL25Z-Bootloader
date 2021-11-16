@@ -18,6 +18,9 @@ CMSIS \
 board \
 drivers \
 source \
+source/cmdcentre \
+source/fifo \
+source/srec \
+source/uart \
 startup \
-utilities \
 

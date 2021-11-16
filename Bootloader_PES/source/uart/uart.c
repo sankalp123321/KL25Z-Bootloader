@@ -14,10 +14,8 @@
 
 #include "uart.h"
 #include "MKL25Z4.h"
-#include "../sysclock.h"
 
 #include "../fifo/cbfifo.h"
-#include "../commons/common.h"
 
 #undef _NO_INTERRUPTS_
 
@@ -89,7 +87,7 @@ void UART_Init(uint32_t baudrate)
 	UART0->BDL = 0;
 	UART0->C4 |= UART0_C4_OSR(OSR); // OSR = 9
 
-	uint16_t sbr = SYSCLOCK_FREQUENCY/(baudrate*OSR);
+	uint16_t sbr = SystemCoreClock/(baudrate*OSR);
 
 	UART0->BDL |= UART0_BDL_SBR(sbr & 0xFF); // val = 125
 
