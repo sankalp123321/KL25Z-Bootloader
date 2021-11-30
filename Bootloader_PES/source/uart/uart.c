@@ -14,6 +14,8 @@
 
 #include "uart.h"
 #include "MKL25Z4.h"
+#include <string.h>
+#include <stdio.h>
 
 #include "../fifo/cbfifo.h"
 
@@ -128,7 +130,7 @@ void UART_SendBytes(char* bytes)
 		i++;
 	}
 #else
-	cbfifo_enqueue(&xmit_buf, bytes, string_len(bytes));
+	cbfifo_enqueue(&xmit_buf, bytes, strlen(bytes));
 	UART0->C2 |= UART0_C2_TIE_MASK;
 #endif
 }
@@ -168,7 +170,14 @@ int UART_RecvChar(char* ch)
 
 int __sys_write(int handle, char *buf, int size)
 {
-	UART_SendByBytes(buf, size);
+	int i = 0;
+	while (i < size) { // copy characters up to null terminator
+		while (cbfifo_length(&xmit_buf) == cbfifo_capacity(&xmit_buf)); // wait for space to open up
+		cbfifo_enqueue(&xmit_buf, &buf[i], 1);
+		i++;
+	}
+
+	UART0->C2 |= UART0_C2_TIE_MASK;
 	return 0;
 }
 

@@ -11,6 +11,7 @@
  */
 #include "cmdcentre.h"
 #include "../uart/uart.h"
+#include "../bootloader/bootloader.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -28,7 +29,9 @@ command_t cmd[] =
 {
 		// Command | Arguments | Command description | command function handler
 		{"Help", "<none>", "help command view", CmdCentre_HelpHandler},
-		{"author", "<none>", "displays the author name", CmdCentre_Author},
+		{"erase", "<none>", "displays the author name", CmdCentre_Erase},
+		{"program", "<none>", "help command view", CmdCentre_Program},
+		{"boot", "<none>", "displays the author name", CmdCentre_BootApplication},
 };
 
 const int cmd_size = sizeof(cmd)/sizeof(cmd[0]);
@@ -47,12 +50,48 @@ void CmdCentre_HelpHandler(int argc, char* argv[])
 	printf("\r\n");
 }
 
-void CmdCentre_Author(int argc, char* argv[])
+void CmdCentre_Erase(int argc, char* argv[])
 {
 	// print author name
-	printf("Sankalp Agrawal\r\n");
+	printf("Flash Erase\r\n");
+	Bootloader_SetState(eERASE);
 }
 
+void CmdCentre_Program(int argc, char* argv[])
+{
+	// print author name
+	printf("Program Flash\r\n");
+	Bootloader_SetState(ePROGRAMFLASH);
+}
+
+void CmdCentre_BootApplication(int argc, char* argv[])
+{
+	// print author name
+	printf("Boot application\r\n");
+	Bootloader_SetState(eBOOTAPPL);
+}
+
+int _de_tokentizer(char* new_str, char* argc[])
+{
+	int i = 0, k = 0, l = 0;
+	int n = strlen(new_str);
+	while(i < (n-1))
+	{
+		char ch = new_str[i];
+		if(isalnum(ch))
+		{
+			argc[k] = &new_str[l];
+			if(new_str[i+1] ==  ' ')
+			{
+				l = i+2;
+				new_str[i+1] = '\0';
+				k++;
+			}
+		}
+		i++;
+	}
+	return k;
+}
 
 
 int CmdCentre_WordEngine(char *cmd_new)
@@ -79,11 +118,6 @@ int CmdCentre_WordEngine(char *cmd_new)
 			return 0;
 		}
 		/**
-		 * Add each inputed character from the UART into the buffer.
-		 */
-		cmd_new[count++] = ch;
-
-		/**
 		 * When enter is pressed then we know a certain command entering is
 		 * complete and we need to process that.
 		 */
@@ -92,6 +126,10 @@ int CmdCentre_WordEngine(char *cmd_new)
 			count = 0;
 			return 1;
 		}
+		/**
+		 * Add each inputed character from the UART into the buffer.
+		 */
+		cmd_new[count++] = ch;
 	}
 	return 0;
 }
@@ -104,7 +142,7 @@ void CmdCentre_CommandEngine(char *cmd_new)
 		/**
 		 * This function will compare string and it is case insensitive.
 		 */
-		if(!strcmpi(cmd[t].cmd, cmd_new))
+		if(!strcmp(cmd[t].cmd, cmd_new))
 		{
 			char* argv[10];
 			printf("\r\n");

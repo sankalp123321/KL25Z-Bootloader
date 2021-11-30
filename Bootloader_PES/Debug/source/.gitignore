@@ -2,3 +2,6 @@
 /fifo/
 /srec/
 /uart/
+/bootloader/
+/flash/
+/tpm/

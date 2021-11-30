@@ -43,7 +43,7 @@ void CmdCentre_HelpHandler(int argc, char* argv[]);
  * @param argc number of arguments
  * @param argv arguments
  */
-void CmdCentre_Author(int argc, char* argv[]);
+void CmdCentre_Erase(int argc, char* argv[]);
 
 /**
  * @brief This function executes when the dump
@@ -51,7 +51,9 @@ void CmdCentre_Author(int argc, char* argv[]);
  * @param argc number of arguments
  * @param argv arguments
  */
-void CmdCentre_Hexdump(int argc, char* argv[]);
+void CmdCentre_Program(int argc, char* argv[]);
+
+void CmdCentre_BootApplication(int argc, char* argv[]);
 
 /**
  * @brief This function executes when the info
