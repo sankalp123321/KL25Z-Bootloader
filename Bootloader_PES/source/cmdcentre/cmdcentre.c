@@ -12,9 +12,11 @@
 #include "cmdcentre.h"
 #include "../uart/uart.h"
 #include "../bootloader/bootloader.h"
+#include "../bootloader/loadApp.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 typedef struct command_t
 {
@@ -24,13 +26,21 @@ typedef struct command_t
 	void (*fp)(int argc, char* argv[]);
 }command_t;
 
+typedef enum btldr_mode_t
+{
+	eRouteDataToBootloader,
+	eNone
+}btldr_mode_t;
+
+btldr_mode_t g_bootldrState = eNone;
+
 // Command table
 command_t cmd[] =
 {
 		// Command | Arguments | Command description | command function handler
 		{"Help", "<none>", "help command view", CmdCentre_HelpHandler},
 		{"erase", "<none>", "displays the author name", CmdCentre_Erase},
-		{"program", "<none>", "help command view", CmdCentre_Program},
+		{"prog", "<none>", "help command view", CmdCentre_Program},
 		{"boot", "<none>", "displays the author name", CmdCentre_BootApplication},
 };
 
@@ -62,6 +72,8 @@ void CmdCentre_Program(int argc, char* argv[])
 	// print author name
 	printf("Program Flash\r\n");
 	Bootloader_SetState(ePROGRAMFLASH);
+	// route all the UART incoming messages to Bootloader.c
+	printf("Send the data over serial\r\n");
 }
 
 void CmdCentre_BootApplication(int argc, char* argv[])
@@ -97,8 +109,22 @@ int _de_tokentizer(char* new_str, char* argc[])
 int CmdCentre_WordEngine(char *cmd_new)
 {
 	char ch;
+	uint8_t byte;
 	static int count = 0;
-	if(UART_RecvChar(&ch) > 0)
+	scanf(&ch);
+	if(Bootloader_GetState() == eWAITFORS19)
+	{
+		if(UART_RecvByte(&byte) > 0)
+		{
+//			printf("%02X ", byte);
+			Load_SRECLine(byte);
+			if((byte == '\n') || (byte == '\r'))
+			{
+				return 1;
+			}
+		}
+	}
+	else if(UART_RecvChar(&ch) > 0)
 	{
 		/**
 		 * Send the recv'd character from the UART to the
@@ -137,6 +163,13 @@ int CmdCentre_WordEngine(char *cmd_new)
 void CmdCentre_CommandEngine(char *cmd_new)
 {
 	uint8_t t = 0;
+
+//	if(Bootloader_GetState() == eWAITFORS19)
+//	{
+//		LoadApp(cmd_new);
+//		return;
+//	}
+
 	while(t < cmd_size)
 	{
 		/**

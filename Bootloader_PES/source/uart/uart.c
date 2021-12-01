@@ -15,9 +15,13 @@
 #include "uart.h"
 #include "MKL25Z4.h"
 #include <string.h>
+#include <stdint.h>
 #include <stdio.h>
 
 #include "../fifo/cbfifo.h"
+
+#define XON 0x11
+#define XOFF 0x13
 
 #undef _NO_INTERRUPTS_
 
@@ -34,19 +38,44 @@ const int r_buf_siz = BUFFFER_SIZE;
 void _xmit_status(uint8_t state) { UART0->C2 |= UART0_C2_TE(state); }
 void _recv_status(uint8_t state) { UART0->C2 |= UART0_C2_RE(state); }
 
+static void SendXONOFF(uint8_t ch) {
+  unsigned char buf[2];
+
+  buf[0] = ch;
+  buf[1] = '\0';
+  UART_SendByBytes(buf, sizeof(buf));
+}
+
 void UART0_IRQHandler()
 {
+//	int send_xoff = 0;
 	if(UART0->S1 & UART0_S1_RDRF_MASK)
 	{
-		char a = UART0->D;
-		cbfifo_enqueue(&recv_buf, &a, sizeof(char));
+		uint8_t a = UART0->D;
+//		printf("%c", a);
+		cbfifo_enqueue(&recv_buf, &a, sizeof(uint8_t));
+
+//		if((recv_buf.gTotalBuffElements+2) == recv_buf.totalCapacity)
+//		{
+//			send_xoff = 1;
+//		}
+//		else
+//		{
+//			send_xoff = 0;
+//			return;
+//		}
 		return;
 	}
 
 	if(UART0->S1 & UART0_S1_TDRE_MASK)
 	{
-		char ch;
-		if(cbfifo_dequeue(&xmit_buf, &ch, sizeof(char)) > 0)
+//		if(send_xoff)
+//		{
+//			UART0->D = XOFF;
+//			return;
+//		}
+		uint8_t ch;
+		if(cbfifo_dequeue(&xmit_buf, &ch, sizeof(uint8_t)) > 0)
 		{
 			UART0->D = ch;
 		}
@@ -93,7 +122,7 @@ void UART_Init(uint32_t baudrate)
 
 	UART0->BDL |= UART0_BDL_SBR(sbr & 0xFF); // val = 125
 
-	UART0->BDH |= UART0_BDH_SBNS(1) | UART0_BDH_SBR(sbr >> 8); // Set 2 stop bits
+	UART0->BDH |= UART0_BDH_SBR(sbr >> 8); // Set 2 stop bits
 	UART0->C1 = 0; // No parity, 8 bit
 
 	cbfifo_init(&recv_buf, r_buf, r_buf_siz);
@@ -111,15 +140,15 @@ void UART_Init(uint32_t baudrate)
 	_recv_status(1);
 }
 
-void UART_SendByte(char byte)
+void UART_SendByte(uint8_t byte)
 {
 #ifndef _NO_INTERRUPTS_
-	cbfifo_enqueue(&xmit_buf, &byte, sizeof(char));
+	cbfifo_enqueue(&xmit_buf, &byte, sizeof(uint8_t));
 	UART0->C2 |= UART0_C2_TIE_MASK;
 #endif
 }
 
-void UART_SendBytes(char* bytes)
+void UART_SendBytes(uint8_t* bytes)
 {
 #ifdef _NO_INTERRUPTS_
 	uint16_t i = 0;
@@ -130,42 +159,42 @@ void UART_SendBytes(char* bytes)
 		i++;
 	}
 #else
-	cbfifo_enqueue(&xmit_buf, bytes, strlen(bytes));
+	cbfifo_enqueue(&xmit_buf, bytes, strlen((char*)bytes));
 	UART0->C2 |= UART0_C2_TIE_MASK;
 #endif
 }
 
-void UART_SendByBytes(char* bytes, int count)
+void UART_SendByBytes(uint8_t* bytes, int count)
 {
-#ifdef _NO_INTERRUPTS_
 	uint16_t i = 0;
 	while(i < count)
 	{
-		while(!(UART0bytes->S1 & UART0_S1_TDRE_MASK)){}
+		while(!(UART0->S1 & UART0_S1_TDRE_MASK)){}
 		UART0->D = bytes[i];
 		i++;
 	}
-#else
-	cbfifo_enqueue(&xmit_buf, bytes, count);
-	UART0->C2 |= UART0_C2_TIE_MASK;
-#endif
 }
 
-void UART_printf(const char* str, ...)
+void UART_printf(const uint8_t* str, ...)
 {
 	char s[256];
 	__builtin_memset(s, 0, sizeof(256));
 	va_list arguments;
 	va_start(arguments, str);
-	vsprintf(s, str, arguments);
+	vsprintf(s, (char*)str, arguments);
 	va_end(arguments);                  // Cleans up the list
 
-	UART_SendBytes(s);
+	UART_SendBytes((uint8_t*)s);
 }
 
 int UART_RecvChar(char* ch)
 {
-	return cbfifo_dequeue(&recv_buf, ch, sizeof(char));
+	return cbfifo_dequeue(&recv_buf, ch, sizeof(uint8_t));
+}
+
+int UART_RecvByte(uint8_t* ch)
+{
+	return cbfifo_dequeue(&recv_buf, ch, sizeof(uint8_t));
 }
 
 int __sys_write(int handle, char *buf, int size)
@@ -185,8 +214,8 @@ int __sys_readc(void)
 {
 	while(!(UART0->S1 & UART0_S1_RDRF_MASK))
 	{
-		char a = UART0->D;
-		return cbfifo_enqueue(&recv_buf, &a, sizeof(char));
+		uint8_t a = UART0->D;
+		return cbfifo_enqueue(&recv_buf, &a, sizeof(uint8_t));
 	}
 	return -1;
 }

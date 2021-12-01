@@ -7,7 +7,8 @@
 
 #ifndef BOOTLOADER_LOADAPP_H_
 #define BOOTLOADER_LOADAPP_H_
-
-void LoadApp();
+#include <stdint.h>
+void LoadApp(char *cmd_new);
+void Load_SRECLine(uint8_t byte);
 
 #endif /* BOOTLOADER_LOADAPP_H_ */

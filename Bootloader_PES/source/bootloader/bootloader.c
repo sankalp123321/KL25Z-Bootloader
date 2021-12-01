@@ -29,16 +29,19 @@ void Bootloader_StateMachine()
     	g_enableTimer = 0;
         // erase the flash
     	Flash_write(0x7800, 30);
-//    	for(int i = 0; i < 10000000; i++){for(int j = 0; j < 100; j++){}}
-//    	Flash_erase(0x7800);
     	int *a = (int*)(0x00007800);
+		printf("%08X\r\n", *a);
+//    	for(int i = 0; i < 10000000; i++){for(int j = 0; j < 100; j++){}}
+    	Flash_erase(0x7800);
     	printf("%08X\r\n", *a);
 //    	for(int i = 0; i < 10000000; i++){for(int j = 0; j < 100; j++){}}
     	g_state = 0xFF;
         break;
     case ePROGRAMFLASH:
     	g_enableTimer = 0;
+    	printf("Data coming in...\r\n");
         // wait for the .s19
+    	g_state = eWAITFORS19;
         break;
     case eBOOTAPPL:
         printf("Entering boot application mode\r\n");
@@ -62,4 +65,9 @@ void Bootloader_StateMachine()
 void Bootloader_SetState(bootstates_t newstate)
 {
     g_state = newstate;
+}
+
+bootstates_t Bootloader_GetState()
+{
+    return g_state;
 }

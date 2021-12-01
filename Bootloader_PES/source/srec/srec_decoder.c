@@ -1,5 +1,6 @@
 
 #include <stdio.h>
+#include <string.h>
 #include "srec_decoder.h"
 
 #define BITS_TO_BYTES(x) (x/2)
@@ -22,21 +23,26 @@ int hex_int_equv(char hex)
     return '-';
 }
 
-uint32_t get_hex_value(char* val, uint16_t input_string_size, uint16_t pos, uint16_t num_bytes_required)
+uint32_t get_hex_value(uint8_t* val, uint16_t input_string_size, uint16_t pos, uint16_t num_bytes_required)
 {
     uint32_t num = 0;
     char str[100] = " ";
     strncpy(str, &val[pos], (num_bytes_required));
-
-    unsigned int h;
+//
     sscanf(str, "%X", &num);
+//    memcpy(num, &val[pos], num_bytes_required);
+//    for(int i = 0; i < num_bytes_required; i++)
+//    {
+//    	num |= val[i];
+//    	num <<= 8;
+//    }
     return num;
 }
 
-int srec_decoder(char* val, uint16_t nbytes)
+int srec_decoder(uint8_t* val, uint16_t nbytes)
 {
     uint16_t pos = 0;
-    char s_type[3] = " ";
+    char s_type[3];
     memset(s_type, 0, sizeof(s_type));
     uint32_t itr = 0;
     uint8_t address_siz = 0; // in bits
@@ -46,7 +52,7 @@ int srec_decoder(char* val, uint16_t nbytes)
     uint16_t payload_size = 0;
     uint8_t crc = 0;
 
-    strncpy(s_type, &val[pos], 2);
+    strncpy(s_type, (char*)&val[pos], 2);
 
     pos = pos + 2;
 
@@ -54,7 +60,7 @@ int srec_decoder(char* val, uint16_t nbytes)
     crc = get_hex_value(val, nbytes, nbytes-3, 2);
 
 
-    if(!strcmp(s_type, "S0")) { address_siz = 4; }
+    if(!strcmp(s_type, "S0")) { address_siz = 4; return 0;}
     else if(!strcmp(s_type, "S1")) { address_siz = 4; }
     else if(!strcmp(s_type, "S2")) { address_siz = 6; }
     else if(!strcmp(s_type, "S3")) { address_siz = 8; }
@@ -72,13 +78,13 @@ int srec_decoder(char* val, uint16_t nbytes)
         itr += 2;
     }
 
-    printf("%s\n", val);
-    printf("string_size[%d]bytes crc[0x%02X] s_type[%s] payload_size[0x%02X]bytes address[0x%X] address_siz[%d]bytes\nData: ", nbytes/2, crc, s_type, payload_size, address, BITS_TO_BYTES(address_siz));
+//    printf("%s\r\n", val);
+    printf("string_size[%d]bytes crc[0x%02X] s_type[%s] payload_size[0x%02X]bytes address[0x%X] address_siz[%d]bytes\r\nData: ", nbytes/2, crc, s_type, payload_size, address, BITS_TO_BYTES(address_siz));
     for (uint8_t i = 0; i < data_size; i++)
     {
         printf("%02X ", data[i]);
     }
-    printf("\n");
+    printf("\r\n");
     memset(s_type, 0, sizeof(s_type));
 
     return 0;

@@ -25,19 +25,19 @@ void UART_Init(uint32_t baudrate);
  * @brief Send 1 byte over the UART.
  * @param byte Byte to be sent.
  */
-void UART_SendByte(char byte);
+void UART_SendByte(uint8_t byte);
 
 /**
  * @brief Send n bytes over the UART.
  * @param bytes Data to be sent.
  */
-void UART_SendBytes(char* bytes);
+void UART_SendBytes(uint8_t* bytes);
 
 /**
  * @brief printf wrapper for uart.
  * @param str Formatted string to be sent
  */
-void UART_printf(const char* str, ...);
+void UART_printf(const uint8_t * str, ...);
 
 /**
  * @brief Recv'ing 1 character from the UART.
@@ -46,12 +46,14 @@ void UART_printf(const char* str, ...);
  */
 int UART_RecvChar(char* ch);
 
+int UART_RecvByte(uint8_t* ch);
+
 /**
  * @brief Send data by specifying number of bytes.
  * @param bytes Data to be sent.
  * @param count Bytes to be sent.
  */
-void UART_SendByBytes(char* bytes, int count);
+void UART_SendByBytes(uint8_t* bytes, int count);
 
 /**
  * @brief This function is called when a system printf

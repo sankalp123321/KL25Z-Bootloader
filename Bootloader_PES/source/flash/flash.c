@@ -14,6 +14,7 @@ int Flash_erase(int sector)
     uint8_t byte_8 = (sector << 16) >> 24;
     uint8_t byte_0 = (sector << 24) >> 24;
 
+    int a = DisableGlobalIRQ();
 
     FTFA->FSTAT = FTFA_FSTAT_FPVIOL_MASK | FTFA_FSTAT_ACCERR_MASK | FTFA_FSTAT_RDCOLERR_MASK;
 
@@ -27,12 +28,22 @@ int Flash_erase(int sector)
     FTFA->FSTAT = FTFA_FSTAT_CCIF_MASK;
 
     while(!(FTFA->FSTAT & FTFA_FSTAT_CCIF_MASK)) {}
+
+    EnableGlobalIRQ(a);
+
     return 1;
 }
 
-int Flash_read(int sector, int* value)
+int Flash_read(int address, int* buffer, int bytes)
 {
-	return 0;
+	int *addr = (int*)address;
+	int i = 0;
+	for(i = 0; i < bytes; i++)
+	{
+		buffer[i] = *addr;
+		addr++;
+	}
+	return i;
 }
 
 int Flash_write(int sector, int value)
@@ -45,7 +56,9 @@ int Flash_write(int sector, int value)
     uint8_t value_byte_16 = (value << 8) >> 24;
     uint8_t value_byte_8 = (value << 16) >> 24;
     uint8_t value_byte_0 = (value << 24) >> 24;
+
     int a = DisableGlobalIRQ();
+
     while(!(FTFA->FSTAT & FTFA_FSTAT_CCIF_MASK)) {}
 
     FTFA->FCCOB0 = 6;
@@ -58,9 +71,11 @@ int Flash_write(int sector, int value)
     FTFA->FCCOB7 = value_byte_24;
 
     FTFA->FSTAT = FTFA_FSTAT_FPVIOL_MASK | FTFA_FSTAT_ACCERR_MASK | FTFA_FSTAT_RDCOLERR_MASK;
-
 	FTFA->FSTAT = FTFA_FSTAT_CCIF_MASK;
+
 	while(!(FTFA->FSTAT & FTFA_FSTAT_CCIF_MASK)) {}
+
 	EnableGlobalIRQ(a);
+
     return 1;
 }

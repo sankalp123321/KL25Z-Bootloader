@@ -7,11 +7,13 @@ typedef enum bootmodes
     eERASE = 1,
     ePROGRAMFLASH = 2,
     eBOOTAPPL = 3,
+	eWAITFORS19 = 4,
 }bootstates_t;
 
 
 void Bootloader_StateMachine(void);
 void Bootloader_SetState(bootstates_t newstate);
 void Bootloader_OneSecondCounter();
+bootstates_t Bootloader_GetState();
 
 #endif
