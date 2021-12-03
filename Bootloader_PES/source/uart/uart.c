@@ -38,6 +38,9 @@ const int r_buf_siz = BUFFFER_SIZE;
 void _xmit_status(uint8_t state) { UART0->C2 |= UART0_C2_TE(state); }
 void _recv_status(uint8_t state) { UART0->C2 |= UART0_C2_RE(state); }
 
+uint8_t gIsXONSent = 1;
+uint8_t gIsXOFFSent = 1;
+
 static void SendXONOFF(uint8_t ch) {
   unsigned char buf[2];
 
@@ -52,18 +55,15 @@ void UART0_IRQHandler()
 	if(UART0->S1 & UART0_S1_RDRF_MASK)
 	{
 		uint8_t a = UART0->D;
-//		printf("%c", a);
+//		if(a == XON)
+//		{
+//			_xmit_status(1);
+//		}
+//		else if(a == XOFF)
+//		{
+//			_xmit_status(0);
+//		}
 		cbfifo_enqueue(&recv_buf, &a, sizeof(uint8_t));
-
-//		if((recv_buf.gTotalBuffElements+2) == recv_buf.totalCapacity)
-//		{
-//			send_xoff = 1;
-//		}
-//		else
-//		{
-//			send_xoff = 0;
-//			return;
-//		}
 		return;
 	}
 
@@ -138,6 +138,7 @@ void UART_Init(uint32_t baudrate)
 
 	_xmit_status(1);
 	_recv_status(1);
+//	SendXONOFF(XON);
 }
 
 void UART_SendByte(uint8_t byte)
@@ -166,6 +167,7 @@ void UART_SendBytes(uint8_t* bytes)
 
 void UART_SendByBytes(uint8_t* bytes, int count)
 {
+#ifdef _NO_INTERRUPTS_
 	uint16_t i = 0;
 	while(i < count)
 	{
@@ -173,6 +175,11 @@ void UART_SendByBytes(uint8_t* bytes, int count)
 		UART0->D = bytes[i];
 		i++;
 	}
+#else
+	cbfifo_enqueue(&xmit_buf, bytes, count);
+	UART0->C2 |= UART0_C2_TIE_MASK;
+#endif
+
 }
 
 void UART_printf(const uint8_t* str, ...)
@@ -194,6 +201,33 @@ int UART_RecvChar(char* ch)
 
 int UART_RecvByte(uint8_t* ch)
 {
+//	if(cbfifo_length(&recv_buf) >= 100)
+//	{
+//		if(gIsXONSent)
+//		{
+////			uint8_t a = XOFF;
+////			UART_SendByBytes(&a, 1);
+//
+////			SendXONOFF(XON);
+//			SendXONOFF(XOFF);
+//			gIsXONSent = 0;
+//			gIsXOFFSent = 1;
+//			printf("\r\n@@@ XOFF %d %d %d\r\n", recv_buf.gTotalBuffElements, gIsXONSent, gIsXOFFSent);
+//		}
+//	}
+//	else if(cbfifo_length(&recv_buf) <= 90)
+//	{
+//		if(gIsXOFFSent)
+//		{
+////			uint8_t a = XON;
+////			UART_SendByBytes(&a, 1);
+////			SendXONOFF(XOFF);
+//			SendXONOFF(XON);
+//			gIsXOFFSent = 0;
+//			gIsXONSent = 1;
+//			printf("\r\n@@@ XON %d %d %d\r\n", recv_buf.gTotalBuffElements, gIsXONSent, gIsXOFFSent);
+//		}
+//	}
 	return cbfifo_dequeue(&recv_buf, ch, sizeof(uint8_t));
 }
 

@@ -9,15 +9,15 @@ make: *** No rule to make target 'all'.  Stop.
 # There is NO WARRANTY, to the extent permitted by law.
  
 
-# Make data base, printed on Sun Nov 28 21:51:26 2021
+# Make data base, printed on Thu Dec  2 21:52:31 2021
 
 # Variables
 
 # 'override' directive
+ 
 GNUMAKEFLAGS := 
 # automatic
 <D = $(patsubst %/,%,$(dir $<))
- 
 # automatic
 ?F = $(notdir $?)
 # environment
@@ -69,7 +69,7 @@ PROGRAMW6432 = C:\Program Files
 # environment
 PROGRAMDATA = C:\ProgramData
 # environment
-VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-55f43403-772c-4e44-9a21-eed22d1fa80b-sock
+VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-ee0240cc-7933-4639-ac37-eda65c125667-sock
 # environment
 VSCODE_CWD = C:\WINDOWS\system32
 # default
@@ -95,7 +95,7 @@ ELECTRON_RUN_AS_NODE = 1
 # automatic
 %F = $(notdir $%)
 # environment
-CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_8792_KDWPGSBAYWTOTYEM
+CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_2796_LBLOXZWOQDSJAQIR
 # environment
 VSCODE_PIPE_LOGGING = true
 # environment
@@ -154,6 +154,7 @@ PROGRAMFILES(X86) = C:\Program Files (x86)
 %D = $(patsubst %/,%,$(dir $%))
 # environment
 LOCALAPPDATA = C:\Users\Sankalp\AppData\Local
+ 
 # environment
 PSMODULEPATH = %ProgramFiles%\WindowsPowerShell\Modules;C:\WINDOWS\system32\WindowsPowerShell\v1.0\Modules
 # default
@@ -166,7 +167,6 @@ PROCESSOR_ARCHITEW6432 = AMD64
 *F = $(notdir $*)
 # environment
 PROCESSOR_IDENTIFIER = Intel64 Family 6 Model 142 Stepping 11, GenuineIntel
- 
 # environment
 OS = Windows_NT
 # environment
@@ -189,8 +189,6 @@ SYSTEMROOT = C:\WINDOWS
 +F = $(notdir $+)
 # environment
 APPDATA = C:\Users\Sankalp\AppData\Roaming
-# environment
-__COMPAT_LAYER = DetectorsAppHealth
 # environment
 TEMP = /c/Users/Sankalp/AppData/Local/Temp
 # environment
@@ -224,11 +222,12 @@ TERM = cygwin
 # environment
 FPS_BROWSER_APP_PROFILE_STRING = Internet Explorer
 # environment
-VSCODE_PID = 8792
+VSCODE_PID = 2796
 # environment
 USERDOMAIN_ROAMINGPROFILE = LAPTOP-GL5VUQLV
 # variable set hash-table stats:
-# Load=106/1024=10%, Rehash=0, Collisions=16/125=13%
+ 
+# Load=105/1024=10%, Rehash=0, Collisions=16/124=13%
 
 # Pattern-specific Variable Values
 
@@ -236,9 +235,9 @@ USERDOMAIN_ROAMINGPROFILE = LAPTOP-GL5VUQLV
 
 # Directories
 
-# . (device -354023392, inode 704857): 13 files, no impossibilities.
+# . (device -354023392, inode 704857): 14 files, no impossibilities.
 
-# 13 files, no impossibilities in 1 directories.
+# 14 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -253,6 +252,7 @@ all:
 #  File does not exist.
 #  File has not been updated.
 
+ 
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
@@ -288,12 +288,12 @@ GNUmakefile:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 20 / storage = 153 B / avg = 7 B
-# current buf: size = 8174 B / used = 153 B / count = 20 / avg = 7 B
+# strcache buffers: 1 (0) / strings = 21 / storage = 184 B / avg = 8 B
+# current buf: size = 8174 B / used = 184 B / count = 21 / avg = 8 B
 
-# strcache performance: lookups = 23 / hit rate = 13%
+# strcache performance: lookups = 24 / hit rate = 12%
 # hash-table stats:
-# Load=20/8192=0%, Rehash=0, Collisions=1/23=4%
-# Finished Make data base on Sun Nov 28 21:51:26 2021
+# Load=21/8192=0%, Rehash=0, Collisions=1/24=4%
+# Finished Make data base on Thu Dec  2 21:52:31 2021
 
  

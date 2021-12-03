@@ -111,16 +111,16 @@ int CmdCentre_WordEngine(char *cmd_new)
 	char ch;
 	uint8_t byte;
 	static int count = 0;
-	scanf(&ch);
 	if(Bootloader_GetState() == eWAITFORS19)
 	{
 		if(UART_RecvByte(&byte) > 0)
 		{
-//			printf("%02X ", byte);
 			Load_SRECLine(byte);
 			if((byte == '\n') || (byte == '\r'))
 			{
-				return 1;
+				// printf("\n");
+				// LoadApp(NULL);
+				return 0;
 			}
 		}
 	}

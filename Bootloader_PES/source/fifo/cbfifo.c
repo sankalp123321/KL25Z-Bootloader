@@ -133,8 +133,11 @@ size_t cbfifo_dequeue(buffer_t *b, void *buf, size_t nbyte)
 
 size_t cbfifo_length(buffer_t *buf)
 {
+	NVIC_DisableIRQ(UART0_IRQn);
+	size_t val = buf->gTotalBuffElements;
+	NVIC_EnableIRQ(UART0_IRQn);
     // return the number of elements in the circular buffer at any given time.
-    return buf->gTotalBuffElements;
+    return val;
 }
 
 size_t cbfifo_capacity(buffer_t *buf)
