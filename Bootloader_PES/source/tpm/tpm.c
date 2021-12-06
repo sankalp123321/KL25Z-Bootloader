@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include "tpm.h"
 #include "MKL25Z4.h"
+#include "../commons.h"
 
 #define _DSO_DEBUG_
 
@@ -21,7 +22,7 @@ volatile static int tpm0_1_msec_cntr = 0;
 
 volatile uint8_t one_second_occoured = 0;
 
-void TPM0_IRQHandler()
+void __attribute__((section(".ramfunc"), long_call)) TPM0_IRQHandler()
 {
 	NVIC_ClearPendingIRQ(TPM0_IRQn);
 	if(TPM0->STATUS & TPM_STATUS_CH0F_MASK)

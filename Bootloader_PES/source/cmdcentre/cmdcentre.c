@@ -13,6 +13,7 @@
 #include "../uart/uart.h"
 #include "../bootloader/bootloader.h"
 #include "../bootloader/loadApp.h"
+#include "fsl_common.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -118,7 +119,7 @@ int CmdCentre_WordEngine(char *cmd_new)
 			Load_SRECLine(byte);
 			if((byte == '\n') || (byte == '\r'))
 			{
-				// printf("\n");
+//				 printf("\n");
 				// LoadApp(NULL);
 				return 0;
 			}

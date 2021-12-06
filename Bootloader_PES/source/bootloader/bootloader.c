@@ -1,10 +1,13 @@
 #include "bootloader.h"
 #include "../flash/flash.h"
 #include <stdio.h>
+#include "loadApp.h"
 
 static bootstates_t g_state = eCHECKFORINPUT;
 static int g_bootApplTimer = 20;
 static int g_enableTimer = 0;
+
+#define MEM_LOC 0xF000
 
 void Bootloader_OneSecondCounter()
 {
@@ -27,14 +30,15 @@ void Bootloader_StateMachine()
     {
     case eERASE:
     	g_enableTimer = 0;
-        // erase the flash
-    	Flash_write(0x7800, 30);
-    	int *a = (int*)(0x00007800);
-		printf("%08X\r\n", *a);
-//    	for(int i = 0; i < 10000000; i++){for(int j = 0; j < 100; j++){}}
-    	Flash_erase(0x7800);
-    	printf("%08X\r\n", *a);
-//    	for(int i = 0; i < 10000000; i++){for(int j = 0; j < 100; j++){}}
+//        // erase the flash
+//    	Flash_write(MEM_LOC, 30);
+//    	int *a = (int*)(MEM_LOC);
+//		printf("%08X\r\n", *a);
+////    	for(int i = 0; i < 10000000; i++){for(int j = 0; j < 100; j++){}}
+//    	Flash_erase(MEM_LOC);
+//    	printf("%08X\r\n", *a);
+////    	for(int i = 0; i < 10000000; i++){for(int j = 0; j < 100; j++){}}
+    	FlashErase();
     	g_state = 0xFF;
         break;
     case ePROGRAMFLASH:

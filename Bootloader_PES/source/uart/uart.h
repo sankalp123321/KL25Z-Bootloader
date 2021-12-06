@@ -14,7 +14,10 @@
 #define UART_H_
 
 #include <stdint.h>
-
+#define XON 0x11
+#define XOFF 0x13
+int IsXmmitBufferEmpty();
+void SendXONOFF(uint8_t ch);
 /**
  * @brief Initialize the UART driver.
  * @param baudrate specify the baudrate for the UART.

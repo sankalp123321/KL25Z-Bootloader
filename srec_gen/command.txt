@@ -1,1 +1,7 @@
 .\srec_cat.exe BreakFastSerial.hex -Intel -o BreakfastSerial.srec -Motorola
+
+arm-none-eabi-size "${BuildArtifactFileName}"
+arm-none-eabi-objcopy -v -O binary "${BuildArtifactFileName}" "${BuildArtifactFileBaseName}.bin"
+arm-none-eabi-objcopy -v -O ihex "${BuildArtifactFileName}" "${BuildArtifactFileBaseName}.hex"
+arm-none-eabi-objcopy -v -O srec "${BuildArtifactFileName}" "${BuildArtifactFileBaseName}.s19"
+# checksum -p ${TargetChip} -d "${BuildArtifactFileBaseName}.bin"

@@ -7,19 +7,11 @@
 
 int hex_int_equv(char hex)
 {
-    if((hex >= '0') && (hex <= '9'))
+    if(hex <= '9')
     {
         return (hex - '0');
     }
-    else if((hex >= 'A') && (hex <= 'F'))
-    {
-        return (hex - 'A' + 10);
-    }
-    else if((hex >= 'a') && (hex <= 'f'))
-    {
-        return (hex - 'a' + 10);
-    }
-    return '-';
+    return (hex - 'A' + 10);
 }
 
 uint32_t get_hex_value(uint8_t* val, uint16_t input_string_size, uint16_t pos, uint16_t num_bytes_required)

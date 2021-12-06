@@ -19,9 +19,9 @@
 #include <stdio.h>
 
 #include "../fifo/cbfifo.h"
+#include "../commons.h"
 
-#define XON 0x11
-#define XOFF 0x13
+
 
 #undef _NO_INTERRUPTS_
 
@@ -41,15 +41,27 @@ void _recv_status(uint8_t state) { UART0->C2 |= UART0_C2_RE(state); }
 uint8_t gIsXONSent = 1;
 uint8_t gIsXOFFSent = 1;
 
-static void SendXONOFF(uint8_t ch) {
-  unsigned char buf[2];
-
-  buf[0] = ch;
-  buf[1] = '\0';
-  UART_SendByBytes(buf, sizeof(buf));
+int IsXmmitBufferEmpty()
+{
+	return (cbfifo_length(&xmit_buf));
 }
 
-void UART0_IRQHandler()
+void SendXONOFF(uint8_t ch) {
+    unsigned char buf[2];
+    buf[0] = ch;
+    buf[1] = '\0';
+//
+////  	uint16_t i = 0;
+//	//while(i < count)
+//	{
+//		while(!(UART0->S1 & UART0_S1_TDRE_MASK)){}
+//		UART0->D = (char)ch;
+//		//i++;
+//	}
+	UART_SendBytes(buf);
+}
+
+void __attribute__((section(".ramfunc"), long_call)) UART0_IRQHandler()
 {
 //	int send_xoff = 0;
 	if(UART0->S1 & UART0_S1_RDRF_MASK)
@@ -69,11 +81,6 @@ void UART0_IRQHandler()
 
 	if(UART0->S1 & UART0_S1_TDRE_MASK)
 	{
-//		if(send_xoff)
-//		{
-//			UART0->D = XOFF;
-//			return;
-//		}
 		uint8_t ch;
 		if(cbfifo_dequeue(&xmit_buf, &ch, sizeof(uint8_t)) > 0)
 		{
@@ -138,7 +145,7 @@ void UART_Init(uint32_t baudrate)
 
 	_xmit_status(1);
 	_recv_status(1);
-//	SendXONOFF(XON);
+	SendXONOFF(XON);
 }
 
 void UART_SendByte(uint8_t byte)
@@ -201,33 +208,32 @@ int UART_RecvChar(char* ch)
 
 int UART_RecvByte(uint8_t* ch)
 {
-//	if(cbfifo_length(&recv_buf) >= 100)
-//	{
-//		if(gIsXONSent)
-//		{
-////			uint8_t a = XOFF;
-////			UART_SendByBytes(&a, 1);
-//
-////			SendXONOFF(XON);
-//			SendXONOFF(XOFF);
-//			gIsXONSent = 0;
-//			gIsXOFFSent = 1;
-//			printf("\r\n@@@ XOFF %d %d %d\r\n", recv_buf.gTotalBuffElements, gIsXONSent, gIsXOFFSent);
-//		}
-//	}
-//	else if(cbfifo_length(&recv_buf) <= 90)
-//	{
-//		if(gIsXOFFSent)
-//		{
-////			uint8_t a = XON;
-////			UART_SendByBytes(&a, 1);
-////			SendXONOFF(XOFF);
+	if(cbfifo_length(&recv_buf) >= 150)
+	{
+		if(gIsXONSent)
+		{
+//			uint8_t a = XOFF;
+//			UART_SendByBytes(&a, 1);
 //			SendXONOFF(XON);
-//			gIsXOFFSent = 0;
-//			gIsXONSent = 1;
+			SendXONOFF(XOFF);
+			gIsXONSent = 0;
+			gIsXOFFSent = 1;
+//			printf("\r\n@@@ XOFF %d %d %d\r\n", recv_buf.gTotalBuffElements, gIsXONSent, gIsXOFFSent);
+		}
+	}
+	else if(cbfifo_length(&recv_buf)<= 30)
+	{
+		if(gIsXOFFSent)
+		{
+//			uint8_t a = XON;
+//			UART_SendByBytes(&a, 1);
+//			SendXONOFF(XOFF);
+			SendXONOFF(XON);
+			gIsXOFFSent = 0;
+			gIsXONSent = 1;
 //			printf("\r\n@@@ XON %d %d %d\r\n", recv_buf.gTotalBuffElements, gIsXONSent, gIsXOFFSent);
-//		}
-//	}
+		}
+	}
 	return cbfifo_dequeue(&recv_buf, ch, sizeof(uint8_t));
 }
 
