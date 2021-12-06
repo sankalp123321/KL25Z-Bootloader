@@ -9,7 +9,7 @@
 #include "MKL25Z4.h"
 #include "../commons.h"
 
-#define _DSO_DEBUG_
+#undef _DSO_DEBUG_
 
 #ifdef _DSO_DEBUG_
 	#define GPIO_DEBUG_48_KHZ 0
@@ -72,6 +72,17 @@ void TPM1_IRQHandler()
 	}
 	pin_status_96 = !pin_status_96;
 #endif
+}
+
+void Tpm_Deinit()
+{
+	SIM->SCGC6 &= ~SIM_SCGC6_TPM0_MASK | ~SIM_SCGC6_TPM1_MASK;
+	//set clock source for tpm
+	SIM->SOPT2 &= ~(SIM_SOPT2_TPMSRC(1) | ~SIM_SOPT2_PLLFLLSEL_MASK);
+	NVIC_DisableIRQ(TPM0_IRQn);
+	NVIC_DisableIRQ(TPM1_IRQn);
+	TPM0->SC = 0;
+	TPM1->SC = 0;
 }
 
 void Tpm_Init()

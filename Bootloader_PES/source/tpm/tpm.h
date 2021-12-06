@@ -9,5 +9,6 @@
 #define TPM_TPM_H_
 
 void Tpm_Init();
+void Tpm_Deinit();
 
 #endif /* TPM_TPM_H_ */

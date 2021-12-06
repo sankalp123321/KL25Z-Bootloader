@@ -94,6 +94,20 @@ void __attribute__((section(".ramfunc"), long_call)) UART0_IRQHandler()
 	}
 }
 
+void UART_Deinit()
+{
+	_xmit_status(0);
+	_recv_status(0);
+	SIM->SCGC4 &= ~SIM_SCGC4_UART0_MASK;
+	SIM->SCGC5 &= ~SIM_SCGC5_PORTA_MASK;
+	SIM->SOPT2 &= ~SIM_SOPT2_UART0SRC(1);
+//	SIM->SOPT2 |= SIM_SOPT2_PLLFLLSEL_MASK;
+	SIM->SOPT5 &= ~SIM_SOPT5_UART0RXSRC_MASK | ~SIM_SOPT5_UART0TXSRC_MASK;
+//	PORTA->PCR[1] = 0;
+//	PORTA->PCR[2] = 0;
+	NVIC_DisableIRQ(UART0_IRQn);
+}
+
 void UART_Init(uint32_t baudrate)
 {
 // enable the uart clock

@@ -11,6 +11,7 @@
 #include "../flash/flash.h"
 #include "fsl_common.h"
 #include "../uart/uart.h"
+#include "../tpm/tpm.h"
 
 uint8_t srec_line[256];
 uint8_t cntr = 0;
@@ -38,7 +39,7 @@ uint32_t get_hex_equiv(uint8_t* val, uint16_t input_string_size, uint16_t pos, u
 }
 
 #undef PRINT_DEBUG
-extern void start_application(unsigned long app_link_location)
+void start_application(unsigned long app_link_location)
 {
     asm(" ldr r1, [r0,#0]");    // get the stack pointer value from the program's reset vector
     asm(" mov sp, r1");         // copy the value to the stack pointer
@@ -80,8 +81,9 @@ void Load_SRECLine(uint8_t byte)
     	else if(srec_line[1] == '8') { address_siz = 6; }
     	else if(srec_line[1] == '9') {
     		address_siz = 4;
-    		DisableGlobalIRQ();
-
+//    		DisableGlobalIRQ();
+    		Tpm_Deinit();
+    		UART_Deinit();
     		SCB->VTOR = 0x00007800 & SCB_VTOR_TBLOFF_Msk;
 
     		start_application(0x7800);

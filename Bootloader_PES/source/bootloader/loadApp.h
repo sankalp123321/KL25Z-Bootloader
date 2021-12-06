@@ -11,5 +11,6 @@
 void FlashErase();
 void LoadApp(char *cmd_new);
 void Load_SRECLine(uint8_t byte);
+void start_application(unsigned long app_link_location);
 
 #endif /* BOOTLOADER_LOADAPP_H_ */

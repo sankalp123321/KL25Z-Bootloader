@@ -17,6 +17,7 @@
 #define XON 0x11
 #define XOFF 0x13
 int IsXmmitBufferEmpty();
+void UART_Deinit();
 void SendXONOFF(uint8_t ch);
 /**
  * @brief Initialize the UART driver.

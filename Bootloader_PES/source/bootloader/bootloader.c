@@ -2,6 +2,7 @@
 #include "../flash/flash.h"
 #include <stdio.h>
 #include "loadApp.h"
+#include "bootApp.h"
 
 static bootstates_t g_state = eCHECKFORINPUT;
 static int g_bootApplTimer = 20;
@@ -49,6 +50,7 @@ void Bootloader_StateMachine()
         break;
     case eBOOTAPPL:
         printf("Entering boot application mode\r\n");
+        BootApp();
         g_enableTimer = 0;
         g_state = 0xFF;
         break;
