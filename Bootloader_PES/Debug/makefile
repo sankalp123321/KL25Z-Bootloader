@@ -11,7 +11,6 @@ RM := rm -rf
 -include startup/subdir.mk
 -include source/uart/subdir.mk
 -include source/tpm/subdir.mk
--include source/srec/subdir.mk
 -include source/flash/subdir.mk
 -include source/fifo/subdir.mk
 -include source/cmdcentre/subdir.mk

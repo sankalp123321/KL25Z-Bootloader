@@ -16,14 +16,17 @@
 #include <stdint.h>
 #define XON 0x11
 #define XOFF 0x13
-int IsXmmitBufferEmpty();
-void UART_Deinit();
-void SendXONOFF(uint8_t ch);
+
 /**
  * @brief Initialize the UART driver.
  * @param baudrate specify the baudrate for the UART.
  */
 void UART_Init(uint32_t baudrate);
+
+/**
+ *
+ */
+void UART_Deinit();
 
 /**
  * @brief Send 1 byte over the UART.

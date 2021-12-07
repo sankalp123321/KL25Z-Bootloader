@@ -30,7 +30,7 @@ int main(void) {
 #endif
     UART_Init(115200);
     Tpm_Init();
-    printf("Hello World\r\n");
+    printf("Bootloader Mode\r\n");
     CmdCentre_CommandEngine("Help");
     /* Enter an infinite loop, just incrementing a counter. */
     while(1) {

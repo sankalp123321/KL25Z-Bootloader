@@ -53,6 +53,11 @@ void CmdCentre_Erase(int argc, char* argv[]);
  */
 void CmdCentre_Program(int argc, char* argv[]);
 
+/**
+ *
+ * @param argc
+ * @param argv
+ */
 void CmdCentre_BootApplication(int argc, char* argv[]);
 
 /**

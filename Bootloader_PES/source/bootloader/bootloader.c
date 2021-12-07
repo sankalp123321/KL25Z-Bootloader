@@ -1,14 +1,15 @@
+#include <stdio.h>
 #include "bootloader.h"
 #include "../flash/flash.h"
-#include <stdio.h>
+
 #include "loadApp.h"
 #include "bootApp.h"
 
-static bootstates_t g_state = eCHECKFORINPUT;
-static int g_bootApplTimer = 20;
-static int g_enableTimer = 0;
+#define BOOT_TIMEOUT 20
 
-#define MEM_LOC 0xF000
+static bootstates_t g_state = eCHECKFORINPUT;
+static int g_bootApplTimer = BOOT_TIMEOUT;
+static int g_enableTimer = 0;
 
 void Bootloader_OneSecondCounter()
 {
@@ -16,7 +17,6 @@ void Bootloader_OneSecondCounter()
     g_bootApplTimer--;
     if(!g_bootApplTimer)
     {
-        printf("Boot application\r\n");
         g_state = eBOOTAPPL;
     }
     else
@@ -31,16 +31,8 @@ void Bootloader_StateMachine()
     {
     case eERASE:
     	g_enableTimer = 0;
-//        // erase the flash
-//    	Flash_write(MEM_LOC, 30);
-//    	int *a = (int*)(MEM_LOC);
-//		printf("%08X\r\n", *a);
-////    	for(int i = 0; i < 10000000; i++){for(int j = 0; j < 100; j++){}}
-//    	Flash_erase(MEM_LOC);
-//    	printf("%08X\r\n", *a);
-////    	for(int i = 0; i < 10000000; i++){for(int j = 0; j < 100; j++){}}
     	FlashErase();
-    	g_state = 0xFF;
+    	g_state = eUnknown;
         break;
     case ePROGRAMFLASH:
     	g_enableTimer = 0;
@@ -52,15 +44,15 @@ void Bootloader_StateMachine()
         printf("Entering boot application mode\r\n");
         BootApp();
         g_enableTimer = 0;
-        g_state = 0xFF;
+        g_state = eUnknown;
         break;
     case eCHECKFORINPUT:
         printf("Entering check for input mode\r\n");
         g_enableTimer = 1;
         // check for 20 seconds for UART command, if the user has not pressed anything
         // then boot the application
-        g_bootApplTimer = 20;
-        g_state = 0xFF;
+        g_bootApplTimer = BOOT_TIMEOUT;
+        g_state = eUnknown;
         // Enable the 20 second time
         break;
     default:

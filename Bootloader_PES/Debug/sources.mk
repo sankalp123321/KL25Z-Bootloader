@@ -22,7 +22,6 @@ source/bootloader \
 source/cmdcentre \
 source/fifo \
 source/flash \
-source/srec \
 source/tpm \
 source/uart \
 startup \

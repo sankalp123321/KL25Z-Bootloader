@@ -23,7 +23,7 @@ void cbfifo_init(buffer_t *b, uint8_t *buffer, uint16_t sizeof_buf)
 	b->gTotalBuffElements = 0;
 }
 
-size_t __attribute__((section(".ramfunc"), long_call)) cbfifo_enqueue(buffer_t *b, void *buf, size_t nbyte)
+size_t cbfifo_enqueue(buffer_t *b, void *buf, size_t nbyte)
 {
     // If the input value is null, return -1
     if(buf == NULL) { return -1; }
@@ -76,7 +76,7 @@ size_t __attribute__((section(".ramfunc"), long_call)) cbfifo_enqueue(buffer_t *
     return i;
 }
 
-size_t __attribute__((section(".ramfunc"), long_call)) cbfifo_dequeue(buffer_t *b, void *buf, size_t nbyte)
+size_t cbfifo_dequeue(buffer_t *b, void *buf, size_t nbyte)
 {
     // If the input value is null, return -1
     if(buf == NULL) { return -1; }
@@ -133,9 +133,7 @@ size_t __attribute__((section(".ramfunc"), long_call)) cbfifo_dequeue(buffer_t *
 
 size_t cbfifo_length(buffer_t *buf)
 {
-//	NVIC_DisableIRQ(UART0_IRQn);
 	size_t val = buf->gTotalBuffElements;
-//	NVIC_EnableIRQ(UART0_IRQn);
     // return the number of elements in the circular buffer at any given time.
     return val;
 }

@@ -27,14 +27,6 @@ typedef struct command_t
 	void (*fp)(int argc, char* argv[]);
 }command_t;
 
-typedef enum btldr_mode_t
-{
-	eRouteDataToBootloader,
-	eNone
-}btldr_mode_t;
-
-btldr_mode_t g_bootldrState = eNone;
-
 // Command table
 command_t cmd[] =
 {
@@ -119,8 +111,6 @@ int CmdCentre_WordEngine(char *cmd_new)
 			Load_SRECLine(byte);
 			if((byte == '\n') || (byte == '\r'))
 			{
-//				 printf("\n");
-				// LoadApp(NULL);
 				return 0;
 			}
 		}
@@ -164,12 +154,6 @@ int CmdCentre_WordEngine(char *cmd_new)
 void CmdCentre_CommandEngine(char *cmd_new)
 {
 	uint8_t t = 0;
-
-//	if(Bootloader_GetState() == eWAITFORS19)
-//	{
-//		LoadApp(cmd_new);
-//		return;
-//	}
 
 	while(t < cmd_size)
 	{

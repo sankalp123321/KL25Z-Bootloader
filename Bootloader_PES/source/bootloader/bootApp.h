@@ -8,6 +8,9 @@
 #ifndef BOOTLOADER_BOOTAPP_H_
 #define BOOTLOADER_BOOTAPP_H_
 
+/**
+ *
+ */
 void BootApp();
 
 #endif /* BOOTLOADER_BOOTAPP_H_ */
