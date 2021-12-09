@@ -64,6 +64,7 @@ void CmdCentre_Program(int argc, char* argv[])
 {
 	// print author name
 	printf("Program Flash\r\n");
+	// Set the state machine to programming mode.
 	Bootloader_SetState(ePROGRAMFLASH);
 	// route all the UART incoming messages to Bootloader.c
 	printf("Send the data over serial\r\n");
@@ -73,9 +74,12 @@ void CmdCentre_BootApplication(int argc, char* argv[])
 {
 	// print author name
 	printf("Boot application\r\n");
+	// Set the state machine to indicate that the user 
+	// wishes to boot the firmware.
 	Bootloader_SetState(eBOOTAPPL);
 }
 
+// Command tokentizer
 int _de_tokentizer(char* new_str, char* argc[])
 {
 	int i = 0, k = 0, l = 0;
@@ -104,10 +108,16 @@ int CmdCentre_WordEngine(char *cmd_new)
 	char ch;
 	uint8_t byte;
 	static int count = 0;
+
+	/**
+	 * When in bootloader "prog" mode we want to
+	 * route all the incoming UART byte stream to the srec module.
+	 */
 	if(Bootloader_GetState() == eWAITFORS19)
 	{
 		if(UART_RecvByte(&byte) > 0)
 		{
+			// Send individual bytes to the SREC module.
 			Load_SRECLine(byte);
 			if((byte == '\n') || (byte == '\r'))
 			{

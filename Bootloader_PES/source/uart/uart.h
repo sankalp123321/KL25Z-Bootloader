@@ -53,6 +53,12 @@ void UART_printf(const uint8_t * str, ...);
  */
 int UART_RecvChar(char* ch);
 
+/**
+ * @brief Recv'ing 1 byte from the UART.
+ * 
+ * @param ch  1 byte to be recv'd from the UART.
+ * @return int successful or not.
+ */
 int UART_RecvByte(uint8_t* ch);
 
 /**

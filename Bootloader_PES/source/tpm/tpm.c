@@ -1,13 +1,16 @@
-/*
- * tpm.c
- *
- *  Created on: 12-Nov-2021
- *      Author: Sankalp
+/**
+ * @file tpm.c
+ * @author Sankalp Agrawal (saag2511@colorado.edu)
+ * @brief Timer setup and gpio toggling
+ * @version 0.1
+ * @date 2021-12-08
+ * 
+ * @copyright Copyright (c) 2021
+ * 
  */
 #include <stdio.h>
 #include "tpm.h"
 #include "MKL25Z4.h"
-#include "../commons.h"
 
 #define INTERRUPT_DELAY 48000
 #define PRESCALAR_DIV_FACTOR 4
@@ -20,6 +23,7 @@ volatile uint8_t one_second_occoured = 0;
 
 void TPM0_IRQHandler()
 {
+	// Clear the interrupt
 	NVIC_ClearPendingIRQ(TPM0_IRQn);
 	if(TPM0->STATUS & TPM_STATUS_CH0F_MASK)
 	{
@@ -27,11 +31,13 @@ void TPM0_IRQHandler()
 	}
 	TPM0->STATUS |= TPM_STATUS_TOF_MASK;
 
+	// 1 second ocunter
 	tpm0_1_msec_cntr++;
 
 	if(tpm0_1_msec_cntr >= INTERRUPT_DELAY)
 	{
 		one_second_occoured = 1;
+		// Toggle the green LED
 		PTB->PTOR |= 1 << GREEN_HEARTBEAT_LED;
 		tpm0_1_msec_cntr = 0;
 	}
@@ -39,6 +45,7 @@ void TPM0_IRQHandler()
 
 void Tpm_Deinit()
 {
+	// Reset the registers
 	SIM->SCGC5 &= ~SIM_SCGC5_PORTB_MASK;
 	SIM->SCGC6 &= ~SIM_SCGC6_TPM0_MASK | ~SIM_SCGC6_TPM1_MASK;
 	//set clock source for tpm
@@ -49,7 +56,7 @@ void Tpm_Deinit()
 
 void Tpm_Init()
 {
-
+	// Eanble clock to PORTB for LED
 	SIM->SCGC5 |= SIM_SCGC5_PORTB_MASK;
 	PORTB->PCR[GREEN_HEARTBEAT_LED] &= ~PORT_PCR_MUX_MASK;
 	PORTB->PCR[GREEN_HEARTBEAT_LED] |= PORT_PCR_MUX(1);

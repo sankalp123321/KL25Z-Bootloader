@@ -28,23 +28,34 @@ int main(void) {
     /* Init FSL debug console. */
     BOARD_InitDebugConsole();
 #endif
+    // Initialise the UART to 115200
     UART_Init(115200);
+    // Intialise the TPM to produce 1 second notifs
     Tpm_Init();
+    // Mode print
     printf("Bootloader Mode\r\n");
+    // Print the initial set of commands
     CmdCentre_CommandEngine("Help");
     /* Enter an infinite loop, just incrementing a counter. */
     while(1) {
+        // Loop through the state machine.
         Bootloader_StateMachine();
+        // Toggle 1 second timer
         if(one_second_occoured)
         {
+            // Bootloader timeout mechanism
             Bootloader_OneSecondCounter();
+            // Reset the one second timer
             one_second_occoured = false;
         }
+        // Form a command
         char cmd[256];
 		if(CmdCentre_WordEngine(cmd))
 		{
-		  CmdCentre_CommandEngine(cmd);
-		  memset(cmd, 0, sizeof(cmd));
+            // Process the command
+		    CmdCentre_CommandEngine(cmd);
+            // Reset
+		    memset(cmd, 0, sizeof(cmd));
 		}
     }
     return 0 ;

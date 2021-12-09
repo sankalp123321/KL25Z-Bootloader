@@ -1,8 +1,13 @@
-/*
- * loadApp.c
- *
- *  Created on: 29-Nov-2021
- *      Author: Sankalp
+/**
+ * @file loadApp.c
+ * @author Sankalp Agrawal (saag2511@colorado.edu)
+ * @brief The file provides definiton to the funtions
+ *        for the erasing and loading the s record into the flash.
+ * @version 0.1
+ * @date 2021-12-08
+ * 
+ * @copyright Copyright (c) 2021
+ * 
  */
 
 // C Standard lib
@@ -48,7 +53,6 @@ static uint32_t get_hex_equiv(uint8_t* val, uint16_t input_string_size, uint16_t
     return num;
 }
 
-#undef PRINT_DEBUG
 void start_application(unsigned long app_link_location)
 {
 	// get the stack pointer value from the program's reset vector

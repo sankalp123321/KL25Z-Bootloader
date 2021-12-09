@@ -38,15 +38,15 @@ int CmdCentre_WordEngine(char *cmd_new);
 void CmdCentre_HelpHandler(int argc, char* argv[]);
 
 /**
- * @brief This function executes when the "author"
- *        command is called. Prints out the autor's name.
+ * @brief This function executes when the "erase"
+ *        command is called.
  * @param argc number of arguments
  * @param argv arguments
  */
 void CmdCentre_Erase(int argc, char* argv[]);
 
 /**
- * @brief This function executes when the dump
+ * @brief This function executes when the "prog"
  *        command is called.
  * @param argc number of arguments
  * @param argv arguments
@@ -54,22 +54,10 @@ void CmdCentre_Erase(int argc, char* argv[]);
 void CmdCentre_Program(int argc, char* argv[]);
 
 /**
- *
- * @param argc
- * @param argv
- */
-void CmdCentre_BootApplication(int argc, char* argv[]);
-
-/**
- * @brief This function executes when the info
- *        command is called. It prints out the
- *        following:
- *        - Version
- *        - Hostname
- *        - build Date
- *        - git commit version
+ * @brief Command handler for the "boot" command.
+ * 
  * @param argc number of arguments
  * @param argv arguments
  */
-void CmdCentre_Info(int argc, char* argv[]);
+void CmdCentre_BootApplication(int argc, char* argv[]);
 #endif /* CMDCENTRE_CMDCENTRE_H_ */
