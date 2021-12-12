@@ -17,6 +17,8 @@
 #include "MKL25Z4.h"
 // Application specific libs
 #include "loadApp.h"
+#include "bootApp.h"
+#include "bootloader.h"
 #include "../flash/flash.h"
 #include "../uart/uart.h"
 #include "../tpm/tpm.h"
@@ -34,7 +36,7 @@ void FlashErase()
 {
 	int eraseTopValue = KL25Z_FLASH_BOUNDARY - SECTOR_SIZE;
 	// top value is 0x20000(128KB), sectors is in 1kb stretch. hence the last sector starts at 0x20000-0x400 = 0x1FC00
-	for(uint32_t i = BOOTLOADER_BOUNDARY; i < eraseTopValue; i+= SECTOR_SIZE)
+	for(uint32_t i = FIRMWARE_VERIFICATION; i < eraseTopValue; i+= SECTOR_SIZE)
 	{
 		Flash_erase(i);
 	}
@@ -53,17 +55,6 @@ static uint32_t get_hex_equiv(uint8_t* val, uint16_t input_string_size, uint16_t
     return num;
 }
 
-void start_application(unsigned long app_link_location)
-{
-	// get the stack pointer value from the program's reset vector
-    asm(" ldr r1, [r0,#0]");
-    // copy the value to the stack pointer
-    asm(" mov sp, r1");
-    // get the program counter value from the program's reset vector
-    asm(" ldr r0, [r0,#4]");
-    // jump to the start address
-    asm(" blx r0");
-}
 void Load_SRECLine(uint8_t byte)
 {
 	gSrecLine[cntr++] = byte;
@@ -91,10 +82,8 @@ void Load_SRECLine(uint8_t byte)
     	else if(gSrecLine[1] == '8') { address_siz = 6; }
     	else if(gSrecLine[1] == '9') {
     		address_siz = 4;
-    		Tpm_Deinit();
-    		UART_Deinit();
-    		SCB->VTOR = BOOTLOADER_BOUNDARY & SCB_VTOR_TBLOFF_Msk;
-    		start_application(BOOTLOADER_BOUNDARY);
+    		BootApp_WriteFirmwareVerificationArea();
+    		Bootloader_SetState(eBOOTAPPL);
     	}
 
     	pos += 2;

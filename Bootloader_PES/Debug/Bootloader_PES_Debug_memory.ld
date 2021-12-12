@@ -6,21 +6,21 @@
  * Generated linker script file for MKL25Z128xxx4
  * Created from memory.ldt by FMCreateLinkMemory
  * Using Freemarker v2.3.30
- * MCUXpresso IDE v11.4.0 [Build 6237] [2021-08-06] on 08-Dec-2021, 8:59:49 PM
+ * MCUXpresso IDE v11.4.0 [Build 6237] [2021-08-06] on 11-Dec-2021, 11:52:54 PM
  */
 
 MEMORY
 {
   /* Define each memory region */
-  PROGRAM_FLASH (rx) : ORIGIN = 0x0, LENGTH = 0x7530 /* 30000 bytes (alias Flash) */  
+  PROGRAM_FLASH (rx) : ORIGIN = 0x0, LENGTH = 0x7000 /* 28K bytes (alias Flash) */  
   SRAM (rwx) : ORIGIN = 0x1ffff000, LENGTH = 0x4000 /* 16K bytes (alias RAM) */  
 }
 
   /* Define a symbol for the top of each memory region */
   __base_PROGRAM_FLASH = 0x0  ; /* PROGRAM_FLASH */  
   __base_Flash = 0x0 ; /* Flash */  
-  __top_PROGRAM_FLASH = 0x0 + 0x7530 ; /* 30000 bytes */  
-  __top_Flash = 0x0 + 0x7530 ; /* 30000 bytes */  
+  __top_PROGRAM_FLASH = 0x0 + 0x7000 ; /* 28K bytes */  
+  __top_Flash = 0x0 + 0x7000 ; /* 28K bytes */  
   __base_SRAM = 0x1ffff000  ; /* SRAM */  
   __base_RAM = 0x1ffff000 ; /* RAM */  
   __top_SRAM = 0x1ffff000 + 0x4000 ; /* 16K bytes */  

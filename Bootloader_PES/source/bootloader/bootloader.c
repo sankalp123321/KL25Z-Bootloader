@@ -80,10 +80,16 @@ void Bootloader_StateMachine()
          * 
          * The state calls the bootApp function to boot the image from the bootlaoder boundary.
          */
-        printf("Entering boot application mode\r\n");
-        BootApp();
+        if(BootApp_IsFirmwareVerificationPresent())
+        {
+        	BootApp();
+        }
+        else
+        {
+        	printf("No Firmware present.\r\n");
+        	g_state = eCHECKFORINPUT;
+        }
         g_enableTimer = 0;
-        g_state = eUnknown;
         break;
     case eCHECKFORINPUT:
         /**

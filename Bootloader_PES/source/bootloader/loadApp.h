@@ -13,7 +13,7 @@
 #ifndef BOOTLOADER_LOADAPP_H_
 #define BOOTLOADER_LOADAPP_H_
 #include <stdint.h>
-#define BOOTLOADER_BOUNDARY 0x7800
+
 /**
  * @brief THis function recursively erases the flash
  *        sectors starting 0x7800
@@ -27,13 +27,5 @@ void FlashErase();
  * @param byte Data byte
  */
 void Load_SRECLine(uint8_t byte);
-
-/**
- * @brief This method boots the firmware image present on 
- *        the bootloader bounday location.
- * 
- * @param app_link_location 
- */
-void start_application(unsigned long app_link_location);
 
 #endif /* BOOTLOADER_LOADAPP_H_ */

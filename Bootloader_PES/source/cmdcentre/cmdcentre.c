@@ -72,8 +72,6 @@ void CmdCentre_Program(int argc, char* argv[])
 
 void CmdCentre_BootApplication(int argc, char* argv[])
 {
-	// print author name
-	printf("Boot application\r\n");
 	// Set the state machine to indicate that the user 
 	// wishes to boot the firmware.
 	Bootloader_SetState(eBOOTAPPL);
