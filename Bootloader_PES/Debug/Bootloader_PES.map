@@ -1476,7 +1476,7 @@ END GROUP
                 0x20003000                __top_SRAM = 0x20003000
                 0x20003000                __top_RAM = 0x20003000
 
-.text           0x00000000     0x52b0
+.text           0x00000000     0x5300
  FILL mask 0xff
                 0x00000000                __vectors_start__ = ABSOLUTE (.)
  *(SORT_BY_ALIGNMENT(.isr_vector))
@@ -1486,7 +1486,7 @@ END GROUP
                 0x000000c0                . = ALIGN (0x4)
                 0x000000c0                __section_table_start = .
                 0x000000c0                __data_section_table = .
-                0x000000c0        0x4 LONG 0x52b0 LOADADDR (.data)
+                0x000000c0        0x4 LONG 0x5300 LOADADDR (.data)
                 0x000000c4        0x4 LONG 0x1ffff080 ADDR (.data)
                 0x000000c8        0x4 LONG 0x54 SIZEOF (.data)
                 0x000000cc                __data_section_table_end = .
@@ -1950,100 +1950,99 @@ END GROUP
  *(SORT_BY_ALIGNMENT(.rodata) SORT_BY_ALIGNMENT(.rodata.*) SORT_BY_ALIGNMENT(.constdata) SORT_BY_ALIGNMENT(.constdata.*))
  *fill*         0x00004e56        0x2 ff
  .rodata.str1.4
-                0x00004e58       0x55 ./source/cmdcentre/cmdcentre.o
- *fill*         0x00004ead        0x3 ff
+                0x00004e58       0xa8 ./source/cmdcentre/cmdcentre.o
  .rodata.CmdCentre_HelpHandler.str1.4
-                0x00004eb0       0x6a ./source/cmdcentre/cmdcentre.o
+                0x00004f00       0x6a ./source/cmdcentre/cmdcentre.o
                                  0x6f (size before relaxing)
- *fill*         0x00004f1a        0x2 ff
+ *fill*         0x00004f6a        0x2 ff
  .rodata.CmdCentre_Erase.str1.4
-                0x00004f1c        0xe ./source/cmdcentre/cmdcentre.o
- *fill*         0x00004f2a        0x2 ff
+                0x00004f6c        0xe ./source/cmdcentre/cmdcentre.o
+ *fill*         0x00004f7a        0x2 ff
  .rodata.CmdCentre_Program.str1.4
-                0x00004f2c       0x2c ./source/cmdcentre/cmdcentre.o
+                0x00004f7c       0x2c ./source/cmdcentre/cmdcentre.o
  .rodata.CmdCentre_WordEngine.str1.4
-                0x00004f58        0x7 ./source/cmdcentre/cmdcentre.o
- *fill*         0x00004f5f        0x1 ff
+                0x00004fa8        0x7 ./source/cmdcentre/cmdcentre.o
+ *fill*         0x00004faf        0x1 ff
  .rodata.CmdCentre_CommandEngine.str1.4
-                0x00004f60       0x1b ./source/cmdcentre/cmdcentre.o
- *fill*         0x00004f7b        0x1 ff
+                0x00004fb0       0x1b ./source/cmdcentre/cmdcentre.o
+ *fill*         0x00004fcb        0x1 ff
  .rodata.Bootloader_OneSecondCounter.str1.4
-                0x00004f7c       0x10 ./source/bootloader/bootloader.o
+                0x00004fcc       0x10 ./source/bootloader/bootloader.o
  .rodata.Bootloader_StateMachine.str1.4
-                0x00004f8c       0x95 ./source/bootloader/bootloader.o
- *fill*         0x00005021        0x3 ff
+                0x00004fdc       0x95 ./source/bootloader/bootloader.o
+ *fill*         0x00005071        0x3 ff
  .rodata.Bootloader_StateMachine
-                0x00005024       0x18 ./source/bootloader/bootloader.o
+                0x00005074       0x18 ./source/bootloader/bootloader.o
  .rodata.get_hex_equiv.str1.4
-                0x0000503c        0x3 ./source/bootloader/loadApp.o
- *fill*         0x0000503f        0x1 ff
+                0x0000508c        0x3 ./source/bootloader/loadApp.o
+ *fill*         0x0000508f        0x1 ff
  .rodata.main.str1.4
-                0x00005040       0x12 ./source/Bootloader_PES.o
+                0x00005090       0x12 ./source/Bootloader_PES.o
                                  0x19 (size before relaxing)
- *fill*         0x00005052        0x2 ff
+ *fill*         0x000050a2        0x2 ff
  .rodata.CLOCK_EnablePll0.str1.4
-                0x00005054       0x1a ./drivers/fsl_clock.o
- *fill*         0x0000506e        0x2 ff
+                0x000050a4       0x1a ./drivers/fsl_clock.o
+ *fill*         0x000050be        0x2 ff
  .rodata.CLOCK_SetPbeMode.str1.4
-                0x00005070       0x1b ./drivers/fsl_clock.o
- *fill*         0x0000508b        0x1 ff
+                0x000050c0       0x1b ./drivers/fsl_clock.o
+ *fill*         0x000050db        0x1 ff
  .rodata.CLOCK_BootToPeeMode.str1.4
-                0x0000508c       0x1b ./drivers/fsl_clock.o
- *fill*         0x000050a7        0x1 ff
+                0x000050dc       0x1b ./drivers/fsl_clock.o
+ *fill*         0x000050f7        0x1 ff
  .rodata.mcgConfig_BOARD_BootClockRUN
-                0x000050a8        0xa ./board/clock_config.o
-                0x000050a8                mcgConfig_BOARD_BootClockRUN
- *fill*         0x000050b2        0x2 ff
+                0x000050f8        0xa ./board/clock_config.o
+                0x000050f8                mcgConfig_BOARD_BootClockRUN
+ *fill*         0x00005102        0x2 ff
  .rodata.simConfig_BOARD_BootClockRUN
-                0x000050b4        0x8 ./board/clock_config.o
-                0x000050b4                simConfig_BOARD_BootClockRUN
+                0x00005104        0x8 ./board/clock_config.o
+                0x00005104                simConfig_BOARD_BootClockRUN
  .rodata.oscConfig_BOARD_BootClockRUN
-                0x000050bc        0x8 ./board/clock_config.o
-                0x000050bc                oscConfig_BOARD_BootClockRUN
+                0x0000510c        0x8 ./board/clock_config.o
+                0x0000510c                oscConfig_BOARD_BootClockRUN
  .rodata.__num_Ciob_streams
-                0x000050c4        0x4 c:/nxp/mcuxpressoide_11.4.0_6237/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.4.0.202103011116/tools/bin/../lib/gcc/arm-none-eabi/10.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libcr_nohost_nf.a(__ciob.o)
-                0x000050c4                __num_Ciob_streams
+                0x00005114        0x4 c:/nxp/mcuxpressoide_11.4.0_6237/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.4.0.202103011116/tools/bin/../lib/gcc/arm-none-eabi/10.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libcr_nohost_nf.a(__ciob.o)
+                0x00005114                __num_Ciob_streams
  .rodata.__assertion_failed.str1.1
-                0x000050c8       0x15 c:/nxp/mcuxpressoide_11.4.0_6237/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.4.0.202103011116/tools/bin/../lib/gcc/arm-none-eabi/10.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libcr_nohost_nf.a(_cr_assert.o)
+                0x00005118       0x15 c:/nxp/mcuxpressoide_11.4.0_6237/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.4.0.202103011116/tools/bin/../lib/gcc/arm-none-eabi/10.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libcr_nohost_nf.a(_cr_assert.o)
  .rodata._Csys_alloc.str1.1
-                0x000050dd       0x18 c:/nxp/mcuxpressoide_11.4.0_6237/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.4.0.202103011116/tools/bin/../lib/gcc/arm-none-eabi/10.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libcr_c.a(alloc.o)
+                0x0000512d       0x18 c:/nxp/mcuxpressoide_11.4.0_6237/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.4.0.202103011116/tools/bin/../lib/gcc/arm-none-eabi/10.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libcr_c.a(alloc.o)
  .rodata.__ctype
-                0x000050f5      0x180 c:/nxp/mcuxpressoide_11.4.0_6237/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.4.0.202103011116/tools/bin/../lib/gcc/arm-none-eabi/10.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libcr_c.a(ctype.o)
-                0x000050f5                __ctype
+                0x00005145      0x180 c:/nxp/mcuxpressoide_11.4.0_6237/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.4.0.202103011116/tools/bin/../lib/gcc/arm-none-eabi/10.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libcr_c.a(ctype.o)
+                0x00005145                __ctype
  .rodata._initio.str1.1
-                0x00005275        0x4 c:/nxp/mcuxpressoide_11.4.0_6237/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.4.0.202103011116/tools/bin/../lib/gcc/arm-none-eabi/10.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libcr_c.a(initio.o)
+                0x000052c5        0x4 c:/nxp/mcuxpressoide_11.4.0_6237/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.4.0.202103011116/tools/bin/../lib/gcc/arm-none-eabi/10.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libcr_c.a(initio.o)
  .rodata.__vfprintf.str1.1
-                0x00005279       0x35 c:/nxp/mcuxpressoide_11.4.0_6237/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.4.0.202103011116/tools/bin/../lib/gcc/arm-none-eabi/10.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libcr_c.a(printf.o)
+                0x000052c9       0x35 c:/nxp/mcuxpressoide_11.4.0_6237/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.4.0.202103011116/tools/bin/../lib/gcc/arm-none-eabi/10.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libcr_c.a(printf.o)
                                  0x38 (size before relaxing)
-                0x000052b0                . = ALIGN (0x4)
- *fill*         0x000052ae        0x2 ff
+                0x00005300                . = ALIGN (0x4)
+ *fill*         0x000052fe        0x2 ff
 
-.glue_7         0x000052b0        0x0
- .glue_7        0x000052b0        0x0 linker stubs
+.glue_7         0x00005300        0x0
+ .glue_7        0x00005300        0x0 linker stubs
 
-.glue_7t        0x000052b0        0x0
- .glue_7t       0x000052b0        0x0 linker stubs
+.glue_7t        0x00005300        0x0
+ .glue_7t       0x00005300        0x0 linker stubs
 
-.vfp11_veneer   0x000052b0        0x0
- .vfp11_veneer  0x000052b0        0x0 linker stubs
+.vfp11_veneer   0x00005300        0x0
+ .vfp11_veneer  0x00005300        0x0 linker stubs
 
-.v4_bx          0x000052b0        0x0
- .v4_bx         0x000052b0        0x0 linker stubs
+.v4_bx          0x00005300        0x0
+ .v4_bx         0x00005300        0x0 linker stubs
 
-.iplt           0x000052b0        0x0
- .iplt          0x000052b0        0x0 ./startup/startup_mkl25z4.o
+.iplt           0x00005300        0x0
+ .iplt          0x00005300        0x0 ./startup/startup_mkl25z4.o
 
-.rel.dyn        0x000052b0        0x0
- .rel.iplt      0x000052b0        0x0 ./startup/startup_mkl25z4.o
+.rel.dyn        0x00005300        0x0
+ .rel.iplt      0x00005300        0x0 ./startup/startup_mkl25z4.o
 
 .ARM.extab
  *(SORT_BY_ALIGNMENT(.ARM.extab*) SORT_BY_ALIGNMENT(.gnu.linkonce.armextab.*))
 
-.ARM.exidx      0x000052b0        0x0
-                0x000052b0                __exidx_start = .
+.ARM.exidx      0x00005300        0x0
+                0x00005300                __exidx_start = .
  *(SORT_BY_ALIGNMENT(.ARM.exidx*) SORT_BY_ALIGNMENT(.gnu.linkonce.armexidx.*))
-                0x000052b0                __exidx_end = .
-                0x000052b0                _etext = .
+                0x00005300                __exidx_end = .
+                0x00005300                _etext = .
 
 .m_usb_data
  *(SORT_BY_ALIGNMENT(m_usb_bdt))
@@ -2061,7 +2060,7 @@ END GROUP
                 0x1ffff080                . = ALIGN (0x4)
                 0x1ffff080                _end_uninit_RESERVED = .
 
-.data           0x1ffff080       0x54 load address 0x000052b0
+.data           0x1ffff080       0x54 load address 0x00005300
  FILL mask 0xff
                 0x1ffff080                _data = .
                 [!provide]                PROVIDE (__start_data_RAM = .)
@@ -2099,7 +2098,7 @@ END GROUP
                 [!provide]                PROVIDE (__end_data_RAM = .)
                 [!provide]                PROVIDE (__end_data_SRAM = .)
 
-.igot.plt       0x1ffff0d4        0x0 load address 0x00005304
+.igot.plt       0x1ffff0d4        0x0 load address 0x00005354
  .igot.plt      0x1ffff0d4        0x0 ./startup/startup_mkl25z4.o
 
 .bss            0x1ffff0d4      0x9f4
@@ -2178,8 +2177,8 @@ END GROUP
                 0x20002c00                . = ALIGN (0x4)
                 0x20003000                _vStackTop = (. + _StackSize)
                 0x00000000                _image_start = LOADADDR (.text)
-                0x00005304                _image_end = (LOADADDR (.data) + SIZEOF (.data))
-                0x00005304                _image_size = (_image_end - _image_start)
+                0x00005354                _image_end = (LOADADDR (.data) + SIZEOF (.data))
+                0x00005354                _image_size = (_image_end - _image_start)
 OUTPUT(Bootloader_PES.axf elf32-littlearm)
 LOAD linker stubs
 

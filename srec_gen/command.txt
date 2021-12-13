@@ -5,3 +5,5 @@ arm-none-eabi-objcopy -v -O binary "${BuildArtifactFileName}" "${BuildArtifactFi
 arm-none-eabi-objcopy -v -O ihex "${BuildArtifactFileName}" "${BuildArtifactFileBaseName}.hex"
 arm-none-eabi-objcopy -v -O srec "${BuildArtifactFileName}" "${BuildArtifactFileBaseName}.s19"
 # checksum -p ${TargetChip} -d "${BuildArtifactFileBaseName}.bin"
+
+arm-none-eabi-objcopy -v -O srec "" ".s19"

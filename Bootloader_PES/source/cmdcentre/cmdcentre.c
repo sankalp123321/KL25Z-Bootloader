@@ -32,9 +32,9 @@ command_t cmd[] =
 {
 		// Command | Arguments | Command description | command function handler
 		{"Help", "<none>", "help command view", CmdCentre_HelpHandler},
-		{"erase", "<none>", "displays the author name", CmdCentre_Erase},
-		{"prog", "<none>", "help command view", CmdCentre_Program},
-		{"boot", "<none>", "displays the author name", CmdCentre_BootApplication},
+		{"erase", "<none>", "erases the flash section for new image", CmdCentre_Erase},
+		{"prog", "<none>", "ready to recv the new firmware image", CmdCentre_Program},
+		{"boot", "<none>", "boot the new firmware image", CmdCentre_BootApplication},
 };
 
 const int cmd_size = sizeof(cmd)/sizeof(cmd[0]);
