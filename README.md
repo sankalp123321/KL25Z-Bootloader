@@ -5,7 +5,7 @@ Project for Principles of Embedded Software is Bootloader for KL25z.
 This project aims at providing a feature that would eliminat the need for OpenSDA. This feature allows the field upgrade of the firmware to be made possible. In addition to the file upgrade tthe bootloader provides verifiction area and bootloader corruption memeory protection.
 
 Use Case:   
-![ethe](resource/img1.PNG)
+![ethe](resource/img1.png)
 
 Memory allocated:  
 ![ethe](resource/flash_memory.PNG)
@@ -24,7 +24,7 @@ To update the firmware:
 4. Teraterm: File->Send File, select the .s19 file and click open.
 5. As soon as the xfer is complete the bootloader will booot the new firmware.
 
-![ethe](resource/steps.PNG)
+![ethe](resource/steps.png)
 
 ```NOTE:```   
 After the .s19 is written, the bootloader will write the signature `0xAA55` to the verification memory location and boot the new firmware.
