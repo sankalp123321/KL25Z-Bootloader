@@ -15,6 +15,7 @@
 // Application specific lib
 #include "bootloader.h"
 #include "../flash/flash.h"
+#include "tpm/tpm.h"
 #include "loadApp.h"
 #include "bootApp.h"
 
@@ -105,6 +106,12 @@ void Bootloader_StateMachine()
         g_state = eUnknown;
         // Enable the 20 second time
         break;
+    case eADDRESSCORRUPTERROR:
+    	printf("Error: ATTEMPTED TO WRITE TO PROTECTED REGION.\r\n");
+    	printf("Reboot the system.\r\n");
+    	Tpm_SetLedColour(0);
+    	g_state = eUnknown;
+    	break;
     default:
         break;
     }

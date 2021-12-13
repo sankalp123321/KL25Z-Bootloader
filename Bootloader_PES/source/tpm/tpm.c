@@ -15,11 +15,14 @@
 #define INTERRUPT_DELAY 48000
 #define PRESCALAR_DIV_FACTOR 4
 
+#define RED_ERROR_LED 18
 #define GREEN_HEARTBEAT_LED 19
 
 volatile static int tpm0_1_msec_cntr = 0;
 
 volatile uint8_t one_second_occoured = 0;
+
+uint8_t g_led_to_blink = GREEN_HEARTBEAT_LED;
 
 void TPM0_IRQHandler()
 {
@@ -37,14 +40,38 @@ void TPM0_IRQHandler()
 	if(tpm0_1_msec_cntr >= INTERRUPT_DELAY)
 	{
 		one_second_occoured = 1;
-		// Toggle the green LED
-		PTB->PTOR |= 1 << GREEN_HEARTBEAT_LED;
+		if(g_led_to_blink == GREEN_HEARTBEAT_LED)
+		{
+			// Toggle the green LED
+			PTB->PTOR |= 1 << GREEN_HEARTBEAT_LED;
+		}
+		else if(g_led_to_blink == RED_ERROR_LED)
+		{
+			// Toggle the red LED
+			PTB->PTOR |= 1 << RED_ERROR_LED;
+		}
 		tpm0_1_msec_cntr = 0;
+	}
+}
+
+void Tpm_SetLedColour(uint8_t isGreen)
+{
+	if(isGreen)
+	{
+		g_led_to_blink = GREEN_HEARTBEAT_LED;
+	}
+	else
+	{
+		g_led_to_blink = RED_ERROR_LED;
 	}
 }
 
 void Tpm_Deinit()
 {
+	PTB->PCOR |= 1 << GREEN_HEARTBEAT_LED;
+	FGPIOB->PDDR &= ~(1 << (GREEN_HEARTBEAT_LED));
+	PORTB->PCR[GREEN_HEARTBEAT_LED] &= ~PORT_PCR_MUX_MASK;
+
 	PTB->PCOR |= 1 << GREEN_HEARTBEAT_LED;
 	FGPIOB->PDDR &= ~(1 << (GREEN_HEARTBEAT_LED));
 	PORTB->PCR[GREEN_HEARTBEAT_LED] &= ~PORT_PCR_MUX_MASK;
@@ -61,9 +88,14 @@ void Tpm_Init()
 {
 	// Eanble clock to PORTB for LED
 	SIM->SCGC5 |= SIM_SCGC5_PORTB_MASK;
+
 	PORTB->PCR[GREEN_HEARTBEAT_LED] &= ~PORT_PCR_MUX_MASK;
 	PORTB->PCR[GREEN_HEARTBEAT_LED] |= PORT_PCR_MUX(1);
 	FGPIOB->PDDR |= 1 << (GREEN_HEARTBEAT_LED);
+
+	PORTB->PCR[RED_ERROR_LED] &= ~PORT_PCR_MUX_MASK;
+	PORTB->PCR[RED_ERROR_LED] |= PORT_PCR_MUX(1);
+	FGPIOB->PDDR |= 1 << (RED_ERROR_LED);
 
 	SIM->SCGC6 |= SIM_SCGC6_TPM0_MASK;
 	//set clock source for tpm

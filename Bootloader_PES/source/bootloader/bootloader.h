@@ -19,6 +19,7 @@ typedef enum bootmodes
     ePROGRAMFLASH = 2,
     eBOOTAPPL = 3,
 	eWAITFORS19 = 4,
+	eADDRESSCORRUPTERROR = 5,
 	eUnknown = 0xFF,
 }bootstates_t;
 

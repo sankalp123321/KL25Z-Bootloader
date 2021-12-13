@@ -24,4 +24,10 @@ void Tpm_Init();
  */
 void Tpm_Deinit();
 
+/**
+ * @brief
+ * @param isGreen
+ */
+void Tpm_SetLedColour(unsigned char isGreen);
+
 #endif /* TPM_TPM_H_ */

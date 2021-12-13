@@ -100,7 +100,16 @@ void Load_SRECLine(uint8_t byte)
     		data |= get_hex_equiv(gSrecLine, cntr, pos + address_siz + itr, 2) << 8;
     		itr += 2;
     		data |= get_hex_equiv(gSrecLine, cntr, pos + address_siz + itr, 2);
-    	    Flash_write(address+i, data);
+    	    if(address > BOOTLOADER_BOUNDARY)
+    	    {
+    	    	Flash_write(address+i, data);
+    	    }
+    	    else
+    	    {
+    	    	// Error condition.
+    	    	Bootloader_SetState(eADDRESSCORRUPTERROR);
+    	    	return;
+    	    }
     	    itr += 2;
     	}
     	cntr = 0;

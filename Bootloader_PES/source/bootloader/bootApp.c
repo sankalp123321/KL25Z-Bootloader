@@ -49,13 +49,13 @@ uint8_t BootApp_IsFirmwareVerificationPresent()
 static void start_application(unsigned long app_link_location)
 {
 	// get the stack pointer value from the program's reset vector
-    asm(" ldr r1, [r0,#0]");
+    asm("ldr r1, [r0,#0]");
     // copy the value to the stack pointer
-    asm(" mov sp, r1");
+    asm("mov sp, r1");
     // get the program counter value from the program's reset vector
-    asm(" ldr r0, [r0,#4]");
+    asm("ldr r0, [r0,#4]");
     // jump to the start address
-    asm(" blx r0");
+    asm("blx r0");
 }
 
 void BootApp()
