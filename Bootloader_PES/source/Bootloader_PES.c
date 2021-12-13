@@ -36,6 +36,7 @@ int main(void) {
     printf("Bootloader Mode\r\n");
     // Print the initial set of commands
     CmdCentre_CommandEngine("Help");
+    Tpm_SetLedColour(1);
     /* Enter an infinite loop, just incrementing a counter. */
     while(1) {
         // Loop through the state machine.

@@ -100,7 +100,7 @@ void Load_SRECLine(uint8_t byte)
     		data |= get_hex_equiv(gSrecLine, cntr, pos + address_siz + itr, 2) << 8;
     		itr += 2;
     		data |= get_hex_equiv(gSrecLine, cntr, pos + address_siz + itr, 2);
-    	    if(address > BOOTLOADER_BOUNDARY)
+    	    if(address >= BOOTLOADER_BOUNDARY)
     	    {
     	    	Flash_write(address+i, data);
     	    }

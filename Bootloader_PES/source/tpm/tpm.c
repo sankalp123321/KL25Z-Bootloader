@@ -40,16 +40,19 @@ void TPM0_IRQHandler()
 	if(tpm0_1_msec_cntr >= INTERRUPT_DELAY)
 	{
 		one_second_occoured = 1;
-		if(g_led_to_blink == GREEN_HEARTBEAT_LED)
-		{
-			// Toggle the green LED
-			PTB->PTOR |= 1 << GREEN_HEARTBEAT_LED;
-		}
-		else if(g_led_to_blink == RED_ERROR_LED)
-		{
-			// Toggle the red LED
-			PTB->PTOR |= 1 << RED_ERROR_LED;
-		}
+//		if(g_led_to_blink == GREEN_HEARTBEAT_LED)
+//		{
+//			PTB->PCOR &= ~(1 << RED_ERROR_LED);
+//			// Toggle the green LED
+//			PTB->PTOR |= 1 << GREEN_HEARTBEAT_LED;
+//		}
+//		else if(g_led_to_blink == RED_ERROR_LED)
+//		{
+//			PTB->PCOR &= ~(1 << GREEN_HEARTBEAT_LED);
+//			// Toggle the red LED
+//			PTB->PTOR |= 1 << RED_ERROR_LED;
+//		}
+		PTB->PTOR |= 1 << g_led_to_blink;
 		tpm0_1_msec_cntr = 0;
 	}
 }
@@ -58,23 +61,26 @@ void Tpm_SetLedColour(uint8_t isGreen)
 {
 	if(isGreen)
 	{
+		PTB->PSOR |= 1 << (RED_ERROR_LED);
 		g_led_to_blink = GREEN_HEARTBEAT_LED;
 	}
 	else
 	{
+		PTB->PSOR |= 1 << (GREEN_HEARTBEAT_LED);
 		g_led_to_blink = RED_ERROR_LED;
 	}
 }
 
 void Tpm_Deinit()
 {
-	PTB->PCOR |= 1 << GREEN_HEARTBEAT_LED;
+	PTB->PSOR |= 1 << RED_ERROR_LED;
+	FGPIOB->PDDR &= ~(1 << (RED_ERROR_LED));
+	PORTB->PCR[RED_ERROR_LED] &= ~PORT_PCR_MUX_MASK;
+
+	PTB->PSOR |= 1 << GREEN_HEARTBEAT_LED;
 	FGPIOB->PDDR &= ~(1 << (GREEN_HEARTBEAT_LED));
 	PORTB->PCR[GREEN_HEARTBEAT_LED] &= ~PORT_PCR_MUX_MASK;
 
-	PTB->PCOR |= 1 << GREEN_HEARTBEAT_LED;
-	FGPIOB->PDDR &= ~(1 << (GREEN_HEARTBEAT_LED));
-	PORTB->PCR[GREEN_HEARTBEAT_LED] &= ~PORT_PCR_MUX_MASK;
 	// Reset the registers
 	SIM->SCGC5 &= ~SIM_SCGC5_PORTB_MASK;
 	SIM->SCGC6 &= ~SIM_SCGC6_TPM0_MASK | ~SIM_SCGC6_TPM1_MASK;
@@ -92,10 +98,12 @@ void Tpm_Init()
 	PORTB->PCR[GREEN_HEARTBEAT_LED] &= ~PORT_PCR_MUX_MASK;
 	PORTB->PCR[GREEN_HEARTBEAT_LED] |= PORT_PCR_MUX(1);
 	FGPIOB->PDDR |= 1 << (GREEN_HEARTBEAT_LED);
+	FGPIOB->PSOR |= 1 << (GREEN_HEARTBEAT_LED);
 
 	PORTB->PCR[RED_ERROR_LED] &= ~PORT_PCR_MUX_MASK;
 	PORTB->PCR[RED_ERROR_LED] |= PORT_PCR_MUX(1);
 	FGPIOB->PDDR |= 1 << (RED_ERROR_LED);
+	FGPIOB->PSOR |= 1 << (RED_ERROR_LED);
 
 	SIM->SCGC6 |= SIM_SCGC6_TPM0_MASK;
 	//set clock source for tpm
